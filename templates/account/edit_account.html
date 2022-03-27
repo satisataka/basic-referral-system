@@ -1,0 +1,34 @@
+{% extends 'layout/basic.html' %}
+{% load i18n crispy_forms_tags %}
+{% block title %}{% translate "Account Edit" %}{% endblock  %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="container">
+	<div class="row m-4 p-4 border rounded shadow-sm">
+		<h1 class="text-primary ">{% translate "Account Edit" %}</h1>
+		<div class="col">
+				<div class="col-12">
+					<form  method="POST">
+					{% csrf_token %}
+					{{ form|crispy }}
+					<input type="submit" name="submit" value="{% translate "Accept" %}" class="btn btn-success d-block mx-auto">
+					</form>
+				</div>
+		</div>
+		</div>
+	</div>
+</div>
+{% else %}
+<div class="container-fluid d-flex h-100 justify-content-center align-items-center p-4">
+	<div class="row bg-white border rounded shadow-sm">
+		<div class="col-12 pt-4">
+			<h2 class="text-center mb-4">{% translate "Log in to System" %}</h2>
+		</div>
+		<div class="col-12 pb-4  d-flex justify-content-md-center">
+			<a href= {% url 'account:login' %} class="btn mx-auto btn-primary btn-lg" role="button" aria-disabled="true">{% translate "Login" %}</a>
+		</div>
+	</div>
+</div>
+{% endif %}
+{% endblock %}

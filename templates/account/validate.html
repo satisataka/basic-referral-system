@@ -1,0 +1,24 @@
+
+{% extends 'layout/basic.html' %}
+{% load i18n crispy_forms_tags %}
+{%block title %}{% translate "Verification" %}{% endblock  %}
+
+{% block content %}
+<div class="container-fluid">
+	<div class="row bg-white justify-content-center">
+		<div class="col-4 m-4 p-4 border rounded shadow-sm">
+		<div class="col-12">
+			<h2 class="text-center">{% translate "Verification" %}</h2>
+		</div>
+		<div class="col-12 p-4">
+			<form method="POST">
+			{% csrf_token %}
+			{{ form|crispy }}
+			<input type="submit" name="submit" value="{% translate "OK" %}" class="btn btn-success d-block mx-auto">
+			</form>
+		</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+

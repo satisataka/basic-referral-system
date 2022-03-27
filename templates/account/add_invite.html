@@ -1,0 +1,42 @@
+{% extends 'layout/basic.html' %}
+{% load i18n crispy_forms_tags %}
+{%block title %}{% translate "Add Invite Code" %}{% endblock  %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<div class="container-fluid">
+	<div class="row bg-white justify-content-center">
+		<div class="col-4 m-4 p-4 border rounded shadow-sm">
+		{% if user.is_authenticated %}
+		<div class="col-12">
+			<h2 class="text-center">{% translate "Add Invite Code" %}</h2>
+		</div>
+		<div class="col-12 p-4">
+			<form  method="POST">
+			{% csrf_token %}
+			{{ form|crispy }}
+			<input type="submit" name="submit" value="{% translate "OK" %}" class="btn btn-success d-block mx-auto">
+			</form>
+		</div>
+		{% else %}
+		<div class="col-12">
+			<h2 class="text-center">{% translate "You are not logged in" %}</h2>
+		</div>
+		{% endif %}
+		</div>
+	</div>
+</div>
+{% else %}
+<div class="container-fluid d-flex h-100 justify-content-center align-items-center p-4">
+	<div class="row bg-white border rounded shadow-sm">
+		<div class="col-12 pt-4">
+			<h2 class="text-center mb-4">{% translate "Log in to System" %}</h2>
+		</div>
+		<div class="col-12 pb-4  d-flex justify-content-md-center">
+			<a href= {% url 'account:login' %} class="btn mx-auto btn-primary btn-lg" role="button" aria-disabled="true">{% translate "Login" %}</a>
+		</div>
+	</div>
+</div>
+{% endif %}
+
+{% endblock %}

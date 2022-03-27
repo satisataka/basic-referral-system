@@ -1,0 +1,70 @@
+{% extends 'layout/basic.html' %}
+{% load i18n %}
+{% block title %}{% translate "Account" %}{% endblock  %}
+
+{% block content %}
+
+
+{% if user.is_authenticated %}
+<div class="container">
+	<div class="row m-4 p-4 border rounded shadow-sm">
+		<h1 class="text-primary ">{% translate "Account" %}</h1>
+
+		<div class="col-12 col-md-7">
+			<h3 class="m-1 fw-bold">{% translate "Information:" %}</h3>
+			<div class="row g-3 m-1">
+				<div class="col-md-12">
+					<p class="h4">{% translate "Username: " %}<small class="text-muted">{{ user.username }}</small></p>
+				</div>
+				<div class="col-md-12">
+					<p class="h4">{% translate "Full name: " %}<small class="text-muted">{{ user.get_full_name }}</small></p>
+				</div>
+				<div class="col-md-12">
+					<p class="h4">{% translate "Email: " %}<small class="text-muted">{{ user.email }}</small></p>
+				</div>
+				<div class="col-md-12">
+					<p class="h4">{% translate "Phone number: " %}<small class="text-muted">{{ user.get_username }}</small></p>
+				</div>
+				<div class="col-md-12">
+					<p class="h6">{% translate "Registration date: " %}<small class="text-muted">{{ user.date_joined }}</small></p>
+				</div>
+				<div class="col-md-12">
+					<p class="h6">{% translate "Last login: " %}<small class="text-muted">{{ user.last_login }}</small></p>
+				</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-5">
+			<h3 class="m-0 fw-bold">{% translate "Invite codes:" %}</h3>
+			<div class="row g-3 m-1">
+				<div class="col-12">
+					<p class="h4">{% translate "Your invite code: " %}<small class="text-muted">{% if user.user_invite.key %}{{ user.user_invite.key }}{% else %}{% translate "No code" %}{% endif %}</small></p>
+				</div>
+				<div class="col-12">
+					<p class="h4">{% translate "Invite code: " %}<small class="text-muted">{% if user.invite %}{{ user.invite.key }}{% else %}<a href={% url 'account:add_invite' %}>{% translate "Add Invite Code" %}</a>{% endif %}</small></p>
+				</div>
+				<div class="col-12">
+					<p class="h4"><a href={% url 'account:list_invite' %}>{% translate "Show all added your code" %}</a></p>
+				</div>
+			</div>
+			</div>
+			<div class="text-center">
+				<a class="btn btn-success" href={% url 'account:edit' %}>{% translate "Edit" %}</a>
+			</div>
+		</div>
+
+	</div>
+</div>
+{% else %}
+<div class="container-fluid d-flex h-100 justify-content-center align-items-center p-4">
+	<div class="row bg-white border rounded shadow-sm">
+		<div class="col-12 pt-4">
+			<h2 class="text-center mb-4">{% translate "Log in to System" %}</h2>
+		</div>
+		<div class="col-12 pb-4  d-flex justify-content-md-center">
+			<a href= {% url 'account:login' %} class="btn mx-auto btn-primary btn-lg" role="button" aria-disabled="true">{% translate "Login" %}</a>
+		</div>
+	</div>
+</div>
+{% endif %}
+
+{% endblock %}

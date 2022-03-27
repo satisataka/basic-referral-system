@@ -1,0 +1,29 @@
+
+{% extends 'layout/basic.html' %}
+{% load i18n crispy_forms_tags %}
+{%block title %}{% translate "Login" %}{% endblock  %}
+
+{% block content %}
+<div class="container-fluid">
+	<div class="row bg-white justify-content-center">
+		<div class="col-4 m-4 p-4 border rounded shadow-sm">
+		{% if user.is_authenticated %}
+		<div class="col-12">
+			<h2 class="text-center">{% translate "You are logged in" %}</h2>
+		</div>
+		{% else %}
+		<div class="col-12">
+			<h2 class="text-center">{% translate "Login" %}</h2>
+		</div>
+		<div class="col-12 p-4">
+			<form  method="POST">
+			{% csrf_token %}
+			{{ form|crispy }}
+			<input type="submit" name="submit" value="{% translate "Send code" %}" class="btn btn-success d-block mx-auto">
+			</form>
+		</div>
+		{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}
