@@ -9,25 +9,18 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env()
+env.read_env(BASE_DIR / '.env')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-bk+wm4kak-910ibv^ajpg+o7+rhs76z+r12h3!2n8b(g+^bv$+'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
-# Application definition
+DEBUG = env.bool('DEBUG', False)
+SECRET_KEY = env('SECRET_KEY')
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 INSTALLED_APPS = [
 	'django.contrib.admin',
@@ -44,7 +37,6 @@ INSTALLED_APPS = [
 	'account',
 	'api',
 ]
-
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
@@ -100,14 +92,7 @@ WSGI_APPLICATION = 'invite_django.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-	'default': {
-		'ENGINE': 'django.db.backends.postgresql_psycopg2',
-		'NAME': 'invite',
-		'USER': 'invite_user',
-		'PASSWORD': 'invite',
-		'HOST': 'localhost',
-		'PORT': '',
-	}
+	'default': env.db()
 }
 
 # Password validation
