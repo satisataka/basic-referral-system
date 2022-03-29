@@ -1,13 +1,8 @@
-from tabnanny import verbose
-from tkinter import Widget
 from django import forms
-from .models import Account, PhoneToken
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from django.contrib.auth.forms import UserCreationForm
+
 from phonenumber_field.formfields import PhoneNumberField
-from phonenumber_field.widgets import PhoneNumberPrefixWidget, PhoneNumberInternationalFallbackWidget
-from django.contrib.auth import get_user_model
+from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
+
 from django import forms
 from django.utils.translation import gettext_lazy as _
 

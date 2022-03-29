@@ -1,9 +1,7 @@
 from django.contrib import admin
 from .models import Account, InviteKey, PhoneToken
 from django.contrib.auth.admin import UserAdmin
-from django.utils.translation import gettext, gettext_lazy as _
-
-
+from django.utils.translation import gettext_lazy as _
 
 class AccountAdmin(UserAdmin):
 	fieldsets = (

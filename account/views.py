@@ -1,55 +1,38 @@
-from django.http import Http404
-from dataclasses import field, fields
-from account.models import Account
-from django.shortcuts import render
-from django.contrib import messages
-from django.contrib.auth import (
-								  authenticate,
-								  logout ,
-								  login
-							  )
-from django.shortcuts import (
-								  render,
-								  get_object_or_404,
-								  redirect
-							  )
-
-from django.contrib.auth import get_user_model
-from django.http import HttpResponseRedirect, HttpResponse
-
-from .forms import LoginForm, ValidateForm, AddInviteCodeForm
-from django.views.generic import FormView
-
-from django.views.generic.detail import DetailView
-
-from .models import PhoneToken, InviteKey, Account
-from django.urls import reverse_lazy
-from django.contrib import messages
-from django.conf import settings
-
-from django.contrib.auth.decorators import login_required
 import time
 
-from django.utils.translation import gettext as _
-
-from django.utils.translation import LANGUAGE_SESSION_KEY
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from django.views.generic.list import ListView
-import re
-from urllib.parse import urlsplit, urlunsplit
-
-from django.conf import settings
-from django.http import HttpResponseRedirect, HttpResponse
-from django.utils.http import is_safe_url, urlunquote
+from django.http import Http404, HttpResponseRedirect
 from django.utils import translation
-from django.contrib.auth import get_user_model, get_user
-from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
+from django.shortcuts import render
+from django.contrib import messages
+from django.urls import reverse_lazy
+from django.conf import settings
+from django.contrib.auth import authenticate, logout, login, get_user_model, get_user
+from django.views.generic import FormView
+from django.core.exceptions import  ValidationError
+from django.utils.translation import gettext as _
+from django.views.generic.edit import UpdateView
+from django.views.generic.list import ListView
 
-def home(request):
-	"""
-	  Home View Renders base.html
-	"""
-	return render(request, "layout/base.html", {})
+from account.models import Account
+from .forms import LoginForm, ValidateForm, AddInviteCodeForm
+from .models import PhoneToken, InviteKey, Account
+
+
+def AccountView(request):
+	return render(request, 'account/account.html')
+
+def LogoutView(request):
+	logout(request)
+	return HttpResponseRedirect(reverse_lazy('account:account'))
+
+def select_lang(request, code):
+	go_next = request.META.get('HTTP_REFERER', '/')
+	response = HttpResponseRedirect(go_next)
+	if code and translation.check_for_language(code):
+		response.set_cookie(settings.LANGUAGE_COOKIE_NAME, code)
+		translation.activate(code)
+	return response
+
 
 class LoginView(FormView):
 	"""sign up user view"""
@@ -83,6 +66,7 @@ class LoginView(FormView):
 
 
 class ValidateView(FormView):
+	"""Validate up user view"""
 	form_class = ValidateForm
 	template_name = 'account/validate.html'
 
@@ -102,22 +86,11 @@ class ValidateView(FormView):
 			return HttpResponseRedirect(reverse_lazy('account:account'))
 		return super().get(request, *args, **kwargs)
 
-def AccountView(request):
-	return render(request, 'account/account.html')
-
-def LogoutView(request):
-	logout(request)
-	return HttpResponseRedirect(reverse_lazy('account:account'))
-
-def select_lang(request, code):
-	go_next = request.META.get('HTTP_REFERER', '/')
-	response = HttpResponseRedirect(go_next)
-	if code and translation.check_for_language(code):
-		response.set_cookie(settings.LANGUAGE_COOKIE_NAME, code)
-		translation.activate(code)
-	return response
 
 class EditView(UpdateView):
+	"""
+	View forms for editing an account
+	"""
 	template_name = 'account/edit_account.html'
 	model = Account
 	fields = ['username', 'first_name', 'last_name', 'email']
@@ -130,7 +103,11 @@ class EditView(UpdateView):
 			raise Http404
 		return super().get_object(queryset)
 
+
 class AddInviteView(FormView):
+	"""
+	View the field for entering the invite code and valid it
+	"""
 	form_class = AddInviteCodeForm
 	template_name = 'account/add_invite.html'
 
@@ -164,7 +141,11 @@ class AddInviteView(FormView):
 			return HttpResponseRedirect(reverse_lazy('account:account'))
 		return super().get(request, *args, **kwargs)
 
+
 class ListInviteView(ListView):
+	"""
+	View list of accounts that entered the user's invite code
+	"""
 	model = get_user_model()
 	template_name = 'account/list_invite.html'
 
@@ -176,11 +157,4 @@ class ListInviteView(ListView):
 			return self.model.objects.filter(invite=user.user_invite)
 		else:
 			raise Http404
-
-	def get_context_data(self, **kwargs):
-		# В первую очередь получаем базовую реализацию контекста
-		context = super().get_context_data(**kwargs)
-		# Добавляем новую переменную к контексту и инициализируем её некоторым значением
-		print(context)
-		return context
 

@@ -1,13 +1,10 @@
 import os
 import hashlib
-import datetime
-import datetime
-import uuid
 import string
 import secrets
 
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, AbstractUser
+from django.contrib.auth.models import BaseUserManager, AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
@@ -15,9 +12,6 @@ from django.contrib.auth.validators import ASCIIUsernameValidator
 from django.conf import settings
 from sendsms.message import SmsMessage
 
-
-
-#manager for our custom model
 class AccountManager(BaseUserManager):
 	"""
 		This is a manager for Account class
@@ -105,9 +99,6 @@ class Account(AbstractUser):
 
 		if self.invite == self.user_invite:
 			raise ValidationError({'invite':_("You can't enter your invite code.")})
-
-
-
 
 
 class PhoneToken(models.Model):

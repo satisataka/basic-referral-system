@@ -1,7 +1,4 @@
 import datetime
-import uuid
-import string
-import secrets
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -34,6 +31,9 @@ class AccountBackend(ModelBackend):
 		1. PhoneToken verification
 		2. Create new user and InviteKey for user, if he doesn't exist. But, if he exists login.
 		'''
+		if not otp:
+			return
+
 		timestamp_difference = datetime.datetime.now() - datetime.timedelta(minutes=getattr(settings, 'ACCOUNT_INVITEKEY_LIFE', 5))
 
 		try:
