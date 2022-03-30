@@ -3,7 +3,7 @@ This app is a simple blank for a referral system.
 Custom user model with authentication Phone Number (SMS)
 
 To set up the application to send real SMS:
-* Setting [django-sms]:(https://github.com/roaldnefs/django-sms)
+* Setting [django-sms](https://github.com/roaldnefs/django-sms)
 * Correct `settings.py` SENDSMS_DUBAG = False
 
 ## Install
